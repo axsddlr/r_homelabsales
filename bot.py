@@ -1,11 +1,12 @@
+import json
 import os
 
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 
-load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
+with open('./config.json') as f:
+    data = json.load(f)
+    TOKEN = data["DISCORD_TOKEN"]
 
 
 class Bot(commands.Bot):
@@ -33,5 +34,5 @@ class Bot(commands.Bot):
 
 
 bot = Bot()
-
+# get string from config file
 bot.run(TOKEN)

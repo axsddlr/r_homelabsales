@@ -1,15 +1,15 @@
-import os
+import json
 from datetime import datetime
 
 import praw
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
-client_id = os.getenv("reddit_client_id")
-client_secret = os.getenv("reddit_client_secret")
+with open('./config.json') as f:
+    data = json.load(f)
+    client_id = data["reddit_client_id"]
+    client_secret = data["reddit_client_secret"]
 
-reddit = praw.Reddit(client_id=f"{client_secret}", client_secret=f"{client_secret}", user_agent="Valo")
+reddit = praw.Reddit(client_id=f"{client_id}", client_secret=f"{client_secret}", user_agent="Valo")
 
 
 def hls_scrape():

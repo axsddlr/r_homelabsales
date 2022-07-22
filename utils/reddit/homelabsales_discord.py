@@ -2,13 +2,13 @@ import os
 
 import ujson as json
 from dhooks import Embed, File, Webhook
-from dotenv import load_dotenv
 
 from api.homelabsales import hls_scrape
 from utils.utils import crimson
 
-load_dotenv()
-hls = os.getenv("hls_webhook_url")
+with open('./config.json') as f:
+    data = json.load(f)
+    hls = data["hls_webhook_url"]
 
 
 class HomeLab:
