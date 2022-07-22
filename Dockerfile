@@ -12,6 +12,7 @@ RUN python -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
+COPY ./config.json /hls_bot/config.json
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
