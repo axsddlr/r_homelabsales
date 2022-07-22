@@ -1,12 +1,6 @@
-import os
-import pathlib
-from enum import Enum
-
-import discord
-import requests
-from discord import app_commands
-from discord.ext import commands
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from discord.ext import commands
+
 from utils.reddit.homelabsales_discord import HomeLab
 
 
@@ -30,7 +24,7 @@ class Scheduer(commands.Cog):
         # add jobs for scheduler
 
         # valorant news monitor
-        scheduler.add_job(self.hls.hls_monitor, "interval", seconds=15)
+        scheduler.add_job(self.hls.hls_monitor, "interval", minutes=3)
 
         # starting the scheduler
         scheduler.start()

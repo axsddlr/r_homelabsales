@@ -4,7 +4,7 @@ import ujson as json
 from dhooks import Embed, File, Webhook
 
 from api.homelabsales import hls_scrape
-from utils.utils import crimson
+from utils.utils import crimson, flatten, news_exists
 
 with open('./config.json') as f:
     data = json.load(f)
@@ -34,31 +34,34 @@ class HomeLab:
         flair = basetree["flair"]
         full_url = "https://www.reddit.com" + url_path
 
-        # check if saved_json exists and check if it is empty
-        if os.path.exists(saved_json) and not saved_json:
-            with open(saved_json, "r") as f:
-                # update saved_json
-                hook = Webhook(hls)
+        news_exists(saved_json)
 
-                embed = Embed(
-                    title="HomeLab Sales",
-                    description=f"[{title}]({full_url})\n\n author: {author}",
-                    color=crimson,
-                    timestamp="now",  # sets the timestamp to current time
-                )
-                embed.set_footer(text="HLS")
-                # embed.set_image(url=thumbnail)
-                file = File("./assets/images/hls_logo.png", name="hls_logo.png")
-                embed.set_thumbnail(url="attachment://hls_logo.png")
+        # open saved_json and check title string
+        with open(saved_json) as f:
+            data = json.load(f)
+            res = flatten(data, "", None)
+        check_file_json = res["data"][0]["title"]
 
-                hook.send(embed=embed, file=file)
-                with open(saved_json, "w") as updated:
-                    json.dump(responseJSON, updated, ensure_ascii=False)
+        if (flair != "US-E") and (check_file_json == title):
+            # print("not patch notes")
+            return
+        elif (flair == "US-E") and (check_file_json != title):
+            # print("False")
+            hook = Webhook(hls)
 
-                updated.close()
+            embed = Embed(
+                title="HomeLab Sales",
+                description=f"[{title}]({full_url})\n\n author: {author}",
+                color=crimson,
+                timestamp="now",  # sets the timestamp to current time
+            )
+            embed.set_footer(text="HLS")
+            # embed.set_image(url=thumbnail)
+            file = File("./assets/images/hls_logo.png", name="hls_logo.png")
+            embed.set_thumbnail(url="attachment://hls_logo.png")
 
-        else:
-            # print("No saved_json")
-            with open(saved_json, "w") as f:
-                json.dump(responseJSON, f, ensure_ascii=False)
-            f.close()
+            hook.send(embed=embed, file=file)
+            with open(saved_json, "w") as updated:
+                json.dump(responseJSON, updated, ensure_ascii=False)
+
+            updated.close()
