@@ -4,8 +4,6 @@ on:
   # run it on push to the default repository branch
   push:
     branches: [master]
-  # run it during pull request
-  pull_request:
 
 env:
   REGISTRY: ghcr.io
@@ -23,6 +21,6 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ${{ env.REGISTRY }}/${{ github.actor }}/${{ github.repository }} .
+        run: docker build -t ${{ env.REGISTRY }}/axsddlr/${{ github.repository }} .
       - name: push image to GitHub Container Registry
-        run: docker push ${{ env.REGISTRY }}/${{ github.actor }}/${{ github.repository }}:latest
+        run: docker push ${{ env.REGISTRY }}/axsddlr/r_homelabsales:latest
