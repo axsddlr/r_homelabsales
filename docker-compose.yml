@@ -1,8 +1,10 @@
-version: "2.1"
+---
+version: '3'
 
 services:
-  bot:
+  hls:
     container_name: "hls_bot"
-    build: .
-    env_file:
-      - config.json
+    image: "ghcr.io/axsddlr/r_homelabsales:latest"
+    restart: unless-stopped
+    volumes:
+      - ./r_hls/config.json:/hls_bot/config.json
