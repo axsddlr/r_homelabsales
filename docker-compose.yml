@@ -2,7 +2,7 @@ version: "2.1"
 
 services:
   bot:
-    container_name: "wombo_bot"
+    container_name: "hls_bot"
     build: .
     env_file:
-      - .env
+      - config.json
