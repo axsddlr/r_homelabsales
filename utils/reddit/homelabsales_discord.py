@@ -4,7 +4,7 @@ import ujson as json
 from dhooks import Embed, File, Webhook
 
 from api.homelabsales import hls_scrape
-from utils.utils import crimson, flatten, news_exists
+from utils.utils import crimson
 
 with open('./config.json') as f:
     data = json.load(f)
@@ -32,36 +32,42 @@ class HomeLab:
         author = basetree["author"]
         # description = basetree["selftext"]
         flair = basetree["flair"]
-        full_url = "https://www.reddit.com" + url_path
 
-        news_exists(saved_json)
+        # if saved_json does not exist, create it
+        if not os.path.exists(saved_json):
+            with open(saved_json, "w") as f:
+                json.dump(responseJSON, f)
+        # if saved_json exists, read it
+        else:
+            with open(saved_json, "r") as f:
+                old_responseJSON = json.load(f)
+            # if the old_responseJSON is not the same as the responseJSON, then send a webhook
+            if old_responseJSON != responseJSON:
+                with open(saved_json, "w") as f:
+                    json.dump(responseJSON, f)
+                # send webhook
+                if flair != "US-E":
+                    # print("not patch notes")
+                    return
+                elif flair == "US-E":
+                    # print("False")
+                    hook = Webhook(hls)
 
-        # open saved_json and check title string
-        with open(saved_json) as f:
-            data = json.load(f)
-            res = flatten(data, "", None)
-        check_file_json = res["data"][0]["title"]
+                    embed = Embed(
+                        title="HomeLab Sales",
+                        description=f"[{title}]({url_path})\n\n author: {author}",
+                        color=crimson,
+                        timestamp="now",  # sets the timestamp to current time
+                    )
+                    embed.set_footer(text="HLS")
+                    # embed.set_image(url=thumbnail)
+                    file = File("./assets/images/hls_logo.png", name="hls_logo.png")
+                    embed.set_thumbnail(url="attachment://hls_logo.png")
 
-        if (flair != "US-E") and (check_file_json == title):
-            # print("not patch notes")
-            return
-        elif (flair == "US-E") and (check_file_json != title):
-            # print("False")
-            hook = Webhook(hls)
+                    hook.send(embed=embed, file=file)
+                    with open(saved_json, "w") as updated:
+                        json.dump(responseJSON, updated, ensure_ascii=False)
 
-            embed = Embed(
-                title="HomeLab Sales",
-                description=f"[{title}]({full_url})\n\n author: {author}",
-                color=crimson,
-                timestamp="now",  # sets the timestamp to current time
-            )
-            embed.set_footer(text="HLS")
-            # embed.set_image(url=thumbnail)
-            file = File("./assets/images/hls_logo.png", name="hls_logo.png")
-            embed.set_thumbnail(url="attachment://hls_logo.png")
-
-            hook.send(embed=embed, file=file)
-            with open(saved_json, "w") as updated:
-                json.dump(responseJSON, updated, ensure_ascii=False)
-
-            updated.close()
+                    updated.close()
+            else:
+                return
