@@ -53,6 +53,7 @@ change config.example.json to config.json
     "DISCORD_TOKEN":"<token>",
     "reddit_client_id":"<client_id>",
     "reddit_client_secret":"<client_secret>",
+    "flair": "<US-E>, <US-W>, etc",
     "hls_webhook_url":"<webhook_url>"
 }
 ```

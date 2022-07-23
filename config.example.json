@@ -2,5 +2,6 @@
     "DISCORD_TOKEN":"",
     "reddit_client_id":"",
     "reddit_client_secret":"",
+    "flair": "",
     "hls_webhook_url":""
 }
