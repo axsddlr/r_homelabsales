@@ -8,11 +8,12 @@ with open('./config.json') as f:
     data = json.load(f)
     client_id = data["reddit_client_id"]
     client_secret = data["reddit_client_secret"]
+    flair = data["flair"]
 
 reddit = praw.Reddit(client_id=f"{client_id}", client_secret=f"{client_secret}", user_agent="Valo")
 
 
-def hls_scrape():
+def hls_scrape(flair=flair):
     """
     It takes the subreddit name, searches for posts with the flair "US-E", and returns the title, url, created time, author,
     and flair of the post
@@ -23,12 +24,12 @@ def hls_scrape():
     for s in sub:
         subreddit = reddit.subreddit(s)
 
-        for submission in subreddit.search('flair:"US-E"', sort="new", limit=20):
+        for submission in subreddit.search(f'flair:"{flair}"', sort="new", limit=20):
             title = submission.title
             post_id = submission.id
-            url = submission.permalink
+            url = submission.url
             created = submission.created
-            body = submission.selftext
+            # body = submission.selftext
             flair = submission.link_flair_text
             headers = {
                 "Access-Control-Allow-Origin": "*",
@@ -41,15 +42,16 @@ def hls_scrape():
             URL = f"https://api.reddit.com/api/info/?id=t3_{post_id}"
             response = requests.get(URL, headers=headers)
             status = response.status_code
-            api.append(
-                {
-                    "title": title,
-                    "url_path": "https://reddit.com" + url,
-                    "created": convert_time(created),
-                    "author": response.json()["data"]["children"][0]["data"]["author"],
-                    "flair": flair,
-                }
-            )
+            if "[FS]" in title:
+                api.append(
+                    {
+                        "title": title,
+                        "url_path": url,
+                        "created": convert_time(created),
+                        "author": response.json()["data"]["children"][0]["data"]["author"],
+                        "flair": flair,
+                    }
+                )
 
         data = {"status": status, "data": api}
         if status != 200:
