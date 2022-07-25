@@ -13,9 +13,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
 COPY /config.example.json /hls_bot/config.json
-COPY /hls_old.json /hls_bot/hls_old.json
 
-RUN chmod 777 /hls_bot/hls_old.json
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
