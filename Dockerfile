@@ -4,18 +4,14 @@ LABEL maintainer="Andre Saddler <contact@rehkloos.com>"
 LABEL build_date="2021-05-23"
 RUN apk update && apk upgrade
 RUN apk add --no-cache git make build-base linux-headers
-RUN pip install virtualenv
 
 WORKDIR /hls_bot
-ENV VIRTUAL_ENV=/opt/venv
-RUN python -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
 COPY /config.example.json /hls_bot/config.json
-COPY /hls_old.json /hls_bot/hls_old.json
+COPY /assets/hls_old.json /hls_bot/hls_old.json
+RUN touch /hls_bot/hls.json
 
-RUN chmod 777 /hls_bot/hls_old.json
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
