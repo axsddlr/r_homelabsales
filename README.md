@@ -78,6 +78,8 @@ services:
     container_name: "hls_bot"
     image: "ghcr.io/axsddlr/r_homelabsales:latest"
     restart: unless-stopped
+    environment:
+      - TZ=America/New_York
     volumes:
       - ./r_hls/config.json:/hls_bot/config.json
 ```
