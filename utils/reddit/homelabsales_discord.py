@@ -32,7 +32,7 @@ class HomeLab:
         file1 = "./hls.json"
         file2 = "./hls_old.json"
 
-        if not os.path.exists(file1):
+        if not os.path.exists(file1) or os.stat(file1).st_size == 0:
             with open(file1, "w") as f:
                 json.dump(responseJSON, f)
         elif not os.path.exists(file2):
