@@ -13,6 +13,8 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
 COPY /config.example.json /hls_bot/config.json
+COPY /assets/hls_old.json /hls_bot/hls_old.json
+RUN touch /hls_bot/hls.json
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
