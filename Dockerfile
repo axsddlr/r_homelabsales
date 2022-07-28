@@ -15,4 +15,4 @@ WORKDIR /hls_bot
 COPY --from=build /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY . .
 
-CMD ["python3", "main.py"]
+CMD ["python3", "bot.py"]
