@@ -1,0 +1,13 @@
+---
+version: '3'
+
+services:
+  hls:
+    container_name: "hls_bot"
+    image: "ghcr.io/axsddlr/r_homelabsales:latest"
+    restart: unless-stopped
+    # choose time zone for bot
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./r_hls/config.json:/hls_bot/config.json
