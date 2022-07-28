@@ -41,7 +41,7 @@ jobs:
       - name: Build image and push to Docker Hub and GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8
           # relative path to the place where source code with Dockerfile is located
           context: ./
           # Note: tags has to be all lower-case
