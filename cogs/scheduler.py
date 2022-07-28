@@ -9,7 +9,7 @@ with open("./config.json") as f:
     interval = data["update_interval"]
 
 
-class Scheduer(commands.Cog):
+class Scheduler(commands.Cog):
 
     def __init__(self, bot):
         """
@@ -36,4 +36,4 @@ class Scheduer(commands.Cog):
 
 
 async def setup(bot):  # set async function
-    await bot.add_cog(Scheduer(bot))  # Use await
+    await bot.add_cog(Scheduler(bot))  # Use await
