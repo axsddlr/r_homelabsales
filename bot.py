@@ -35,4 +35,4 @@ class Bot(commands.Bot):
 
 bot = Bot()
 # get string from config file
-bot.run(TOKEN)
+bot.run(TOKEN, reconnect=True)
