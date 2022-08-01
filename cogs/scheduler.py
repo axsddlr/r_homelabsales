@@ -1,10 +1,15 @@
+import ujson as json
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 
 from utils.reddit.homelabsales_discord import HomeLab
 
+with open("./config.json") as f:
+    data = json.load(f)
+    interval = data["update_interval"]
 
-class Scheduer(commands.Cog):
+
+class Scheduler(commands.Cog):
 
     def __init__(self, bot):
         """
@@ -24,11 +29,11 @@ class Scheduer(commands.Cog):
         # add jobs for scheduler
 
         # valorant news monitor
-        scheduler.add_job(self.hls.hls_monitor, "interval", minutes=3)
+        scheduler.add_job(self.hls.hls_monitor, "interval", minutes=interval)
 
         # starting the scheduler
         scheduler.start()
 
 
 async def setup(bot):  # set async function
-    await bot.add_cog(Scheduer(bot))  # Use await
+    await bot.add_cog(Scheduler(bot))  # Use await
