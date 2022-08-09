@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir  -r requirements.txt
 
 FROM python:3.10.6-slim-buster AS final
 WORKDIR /hls_bot
-COPY --from=build /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+COPY --from=build /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY . .
 
 RUN echo '{"status":200,"data":[{"title":"","url_path":"","author":"","flair":""}]}' > /hls_bot/hls.json
