@@ -4,9 +4,16 @@ import os
 import discord
 from discord.ext import commands
 
-with open('config.json') as f:
-    data = json.load(f)
-    TOKEN = data["DISCORD_TOKEN"]
+
+# Checking if the config.json file exists, if it does it will load the token from the file and if it doesn't it will
+# exit the program.
+if os.path.exists("config.json"):
+    with open('config.json') as f:
+        data = json.load(f)
+        TOKEN = data["DISCORD_TOKEN"]
+else:
+    print("config.json not found")
+    exit()
 
 
 class Bot(commands.Bot):
