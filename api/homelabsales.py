@@ -1,37 +1,42 @@
+import datetime
 import json
 from datetime import datetime
 
 import praw
 import requests
 
-
 with open("./config.json") as f:
     data = json.load(f)
     client_id = data["reddit_client_id"]
     client_secret = data["reddit_client_secret"]
-    flair = data["flair"]
+    flairs = data["flair"]
 
 reddit = praw.Reddit(client_id=f"{client_id}", client_secret=f"{client_secret}", user_agent="Valo")
 
 
-def hls_scrape(flair=flair):
-    """
-    It takes the subreddit name, searches for posts with the flair "US-E", and returns the title, url, created time, author,
-    and flair of the post
-    :return: A dictionary with a status code and a list of dictionaries.
-    """
+def hls_scrape():
     sub = ['homelabsales']  # make a list of subreddits you want to scrape the data from
-    api = []
     for s in sub:
         subreddit = reddit.subreddit(s)
 
-        for submission in subreddit.search(f'flair:"{flair}"', sort="new", limit=20):
+        submissionsLast24 = []
+        for submission in subreddit.new(limit=100):
+            utcPostTime = submission.created
+            submissionDate = datetime.utcfromtimestamp(utcPostTime)
+            submissionDateTuple = submissionDate.timetuple()
+
+            currentTime = datetime.utcnow()
+
+            # How long ago it was posted.
+            submissionDelta = currentTime - submissionDate
+
             title = submission.title
-            post_id = submission.id
-            url = submission.url
-            created = submission.created
-            # body = submission.selftext
+            link = 'www.reddit.com' + submission.permalink
+            submissionDelta = str(submissionDelta)
+
             flair = submission.link_flair_text
+            post_id = submission.id
+
             headers = {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET",
@@ -43,18 +48,24 @@ def hls_scrape(flair=flair):
             URL = f"https://api.reddit.com/api/info/?id=t3_{post_id}"
             response = requests.get(URL, headers=headers)
             status = response.status_code
-            if "[FS]" in title:
-                api.append(
-                    {
-                        "title": title,
-                        "url_path": url,
-                        "created": convert_time(created),
-                        "author": response.json()["data"]["children"][0]["data"]["author"],
-                        "flair": flair,
-                    }
-                )
 
-        data = {"status": status, "data": api}
+            author = response.json()["data"]["children"][0]["data"]["author"]
+
+            if 'day' not in submissionDelta:
+                if "FS" in title:
+                    if flair == f"{flairs}":
+                        submissionsLast24.append(
+                            {
+                                "title": title,
+                                "url_path": link,
+                                "created": submissionDelta,
+                                "author": author,
+                                "flair": flair
+                            }
+                        )
+
+        # return submissionsLast24
+        data = {"status": status, "data": submissionsLast24}
         if status != 200:
             raise Exception("API response: {}".format(status))
         return data
