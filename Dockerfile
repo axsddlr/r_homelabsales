@@ -5,7 +5,7 @@ RUN mkdir -p /hls_bot
 WORKDIR /hls_bot
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git gcc build-essential python-dev -y
+    apt-get install -y --no-install-recommends git gcc build-essential python-dev
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir  -r requirements.txt
@@ -19,4 +19,4 @@ RUN echo '{"status":200,"data":[{"title":"","url_path":"","author":"","flair":""
 
 RUN chmod -R 777 .
 
-CMD ["python3", "bot.py"]
+CMD ["python", "bot.py"]
