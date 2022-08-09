@@ -5,7 +5,7 @@ RUN mkdir -p /hls_bot
 WORKDIR /hls_bot
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git gcc build-essential python-dev
+    apt-get install -y --no-install-recommends git gcc build-essential python3-dev apt-utils
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir  -r requirements.txt
