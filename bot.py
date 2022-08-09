@@ -4,7 +4,7 @@ import os
 import discord
 from discord.ext import commands
 
-with open('./config.json') as f:
+with open('config.json') as f:
     data = json.load(f)
     TOKEN = data["DISCORD_TOKEN"]
 
