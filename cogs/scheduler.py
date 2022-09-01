@@ -2,7 +2,7 @@ import ujson as json
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 
-from utils.reddit.homelabsales_discord import HomeLab
+from utils.reddit.homelabsales_monitor import HomeLab
 
 with open("./config.json") as f:
     data = json.load(f)
