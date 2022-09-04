@@ -69,7 +69,7 @@ class HomeLab:
             return
 
     @staticmethod
-    def hls_notifications(flair=flair):
+    def hls_notifications():
         # Calling the hls_scrape function from the api.homelabsales module.
         responseJSON = hls_scrape()
 
@@ -95,8 +95,8 @@ class HomeLab:
         check_file_json = res["data"][0]["title"]
 
         if title != check_file_json:
-            notif = pyntfy.Notification('r_hls', f"{new_full_url}", title=f'{title}')
-            notif.add_action(pyntfy.actions.ViewAction('Link', f"{new_full_url}"))
+            notif = pyntfy.Notification('r_hls', "", title=title)
+            notif.add_action(pyntfy.actions.ViewAction('Link', new_full_url))
             notif.send()
 
             # create a new file and dump the data from old_entry into it
