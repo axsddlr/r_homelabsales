@@ -15,10 +15,13 @@ else:
     print("config.json not found")
     exit()
 
+intents = discord.Intents.default()
+intents.message_content = True
+
 
 class Bot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="!", intents=discord.Intents.all())
+        super().__init__(command_prefix="!", intents=intents)
 
     async def startup(self):
         await bot.wait_until_ready()
