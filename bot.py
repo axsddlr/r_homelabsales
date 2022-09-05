@@ -18,7 +18,7 @@ else:
 
 class Bot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="!", intents=discord.Intents.default())
+        super().__init__(command_prefix="!", intents=discord.Intents.all())
 
     async def startup(self):
         await bot.wait_until_ready()
