@@ -32,12 +32,12 @@ class HomeLab:
         new_author = new_entry["author"]
         # description = new_entry["selftext"]
         # flair = new_entry["flair"]
-        new_full_url = new_url_path
+        new_full_url = "https://" + new_url_path
 
         # create file named hls.json
         if not os.path.exists("./hls.json"):
             with open("./hls.json", "w") as f:
-                json.dump(responseJSON, f)
+                json.dump(responseJSON, f, ensure_ascii=False)
 
         with open("./hls.json") as f:
             data = json.load(f)
@@ -52,9 +52,11 @@ class HomeLab:
 
             embed = DiscordEmbed(
                 title="HomeLab Sales",
-                description=f"[{title}]({new_full_url})\n\n author: {new_author}",
+                # url=new_full_url,
+                description=f"{title}\nauthor: {new_author}\n",
                 color=crimson)
             embed.set_thumbnail(url='attachment://hls_logo.png')
+            embed.add_embed_field(name='Link', value=f'{new_full_url}\n\n')
             embed.set_timestamp()
             embed.set_footer(text=f"HLS ({flair})")
 
