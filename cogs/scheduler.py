@@ -31,6 +31,9 @@ class Scheduler(commands.Cog):
         # valorant news monitor
         scheduler.add_job(self.hls.hls_monitor, "interval", minutes=int(interval))
 
+        scheduler.add_job(self.hls.hls_notifications, "interval", minutes=int(interval))
+        # TODO: enable via config file
+
         # starting the scheduler
         scheduler.start()
 
