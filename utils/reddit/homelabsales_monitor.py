@@ -1,5 +1,5 @@
 import ujson as json
-from dhooks import Embed, File, Webhook
+from discord_webhook import DiscordWebhook, DiscordEmbed
 import os
 
 from api.homelabsales import hls_scrape
@@ -45,20 +45,21 @@ class HomeLab:
         check_file_json = res["data"][0]["title"]
 
         if title != check_file_json:
-            hook = Webhook(hls)
+            webhook = DiscordWebhook(url=f'{hls}')
 
-            embed = Embed(
+            with open("./assets/images/hls_logo.png", "rb") as f:
+                webhook.add_file(file=f.read(), filename='hls_logo.png')
+
+            embed = DiscordEmbed(
                 title="HomeLab Sales",
                 description=f"[{title}]({new_full_url})\n\n author: {new_author}",
-                color=crimson,
-                timestamp="now",  # sets the timestamp to current time
-            )
+                color=crimson)
+            embed.set_thumbnail(url='attachment://hls_logo.png')
+            embed.set_timestamp()
             embed.set_footer(text=f"HLS ({flair})")
-            # embed.set_image(url=thumbnail)
-            file = File("./assets/images/hls_logo.png", name="hls_logo.png")
-            embed.set_thumbnail(url="attachment://hls_logo.png")
 
-            hook.send(embed=embed, file=file)
+            webhook.add_embed(embed)
+            webhook.execute()
 
             # create a new file and dump the data from old_entry into it
             with open("./hls.json", "w") as f:
